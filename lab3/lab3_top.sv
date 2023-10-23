@@ -28,6 +28,7 @@
   `define S 7'b0010010
   `define D 7'b0100001
   `define R 7'b1001110
+  `define off 7'b1111111
 
 module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   input [9:0] SW;
@@ -46,16 +47,16 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   vDFF #(`wid) STATE (clk, ns_rst, ps);
   assign ns_rst = rst_n ? `S0 : ns;
   
-  always @(*) begin
-		case({ps,SW})
+  always_comb begin
+		case(ps)
 			
 		`S0 : if(SW == 10'b0000000111) begin
 				ns = `S1;
-				HEX0 = `seven;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S7;
@@ -63,11 +64,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S1 : if(SW == 10'b0000000000) begin
 				ns = `S2;
-				HEX0 = `zero;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S8;
@@ -75,11 +76,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S2 : if(SW == 10'b0000000011) begin
 				ns = `S3;
-				HEX0 = `three;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S9;
@@ -87,11 +88,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S3 : if(SW == 10'b0000000010) begin
 				ns = `S4;
-				HEX0 = `two;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S10;
@@ -99,11 +100,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S4 : if(SW == 10'b0000000110) begin
 				ns = `S5;
-				HEX0 = `six;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S11;
@@ -111,18 +112,18 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S5 : if(SW == 10'b0000000010) begin
 				ns = `S6;
-				HEX0 = `two;
+				
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
-				{HEX4, HEX3, HEX2, HEX1, HEX0} = {`E, `R, `R, `O, `R};
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S12;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
 			end
 		
-		`S6 : {HEX3, HEX2, HEX1, HEX0} = {`O, `P, `E, `N};
+		`S6 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `O, `P, `E, `N};
 				
 		`S7 : ns = `S8;
 		`S8 : ns = `S9;
@@ -133,6 +134,14 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 		
 		endcase
   end
+  
+  case(ps)
+  `S1 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
+  `S2 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
+  `S3 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `three};
+  `S4 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
+  `S5 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
+  `S6 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
   
 endmodule
 
