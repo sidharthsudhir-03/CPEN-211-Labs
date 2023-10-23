@@ -44,15 +44,18 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   wire [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
   wire [`wid-1:0] ps, ns_rst;
   reg [`wid-1:0] ns;
+  
   vDFF #(`wid) STATE (clk, ns_rst, ps);
   assign ns_rst = rst_n ? `S0 : ns;
   
-  always_comb begin
+  
+  always @(*) begin
+  {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = `off;
 		case(ps)
 			
 		`S0 : if(SW == 10'b0000000111) begin
 				ns = `S1;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -64,7 +67,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S1 : if(SW == 10'b0000000000) begin
 				ns = `S2;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -76,7 +79,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S2 : if(SW == 10'b0000000011) begin
 				ns = `S3;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `three};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -88,7 +91,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S3 : if(SW == 10'b0000000010) begin
 				ns = `S4;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -100,7 +103,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S4 : if(SW == 10'b0000000110) begin
 				ns = `S5;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -112,7 +115,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				
 		`S5 : if(SW == 10'b0000000010) begin
 				ns = `S6;
-				
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
 				ns = `S13;
@@ -131,10 +134,12 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 		`S10 : ns = `S11;
 		`S11 : ns = `S12;
 		`S12 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
+		default : ns = 4'bxxxx;
 		
 		endcase
   end
   
+  /*
   case(ps)
   `S1 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
   `S2 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
@@ -142,6 +147,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   `S4 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
   `S5 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
   `S6 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
+  */
   
 endmodule
 
