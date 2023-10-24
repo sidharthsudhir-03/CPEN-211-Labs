@@ -18,7 +18,6 @@
   `define S10 4'b1010	//~2
   `define S11 4'b1011	//~6
   `define S12 4'b1100	//~2
-  `define S13 4'b1101	//>9
   `define O 7'b1000000
   `define P 7'b0001100
   `define E 7'b0000110
@@ -59,11 +58,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S7;
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `off};
 			end
 				
 		`S1 : if(SW == 10'b0000000000) begin
@@ -71,11 +70,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S8;
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `off};
 			end
 				
 		`S2 : if(SW == 10'b0000000011) begin
@@ -83,11 +82,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `three};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S9;
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `off};
 			end
 				
 		`S3 : if(SW == 10'b0000000010) begin
@@ -95,11 +94,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S10;
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `off};
 			end
 				
 		`S4 : if(SW == 10'b0000000110) begin
@@ -107,11 +106,11 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
 				ns = `S11;
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `off};
 			end
 				
 		`S5 : if(SW == 10'b0000000010) begin
@@ -119,7 +118,6 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
-				ns = `S13;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -127,15 +125,49 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
 			end
 		
-		`S6 : {ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S6, `off, `off, `O, `P, `E, `N};
+		`S6 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S6), `off, `off, `O, `P, `E, `N};
+			end
 				
-		`S7 : ns = `S8;
-		`S8 : ns = `S9;
-		`S9 : ns = `S10;
-		`S10 : ns = `S11;
-		`S11 : ns = `S12;
-		`S12 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
-		`S13 : ns = `S13;
+		`S7 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S8), `off, `off, `off, `off, `off, `off};
+			end
+		`S8 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S9), `off, `off, `off, `off, `off, `off};
+			end
+		`S9 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S10), `off, `off, `off, `off, `off, `off};
+			end
+		`S10 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S11), `off, `off, `off, `off, `off, `off};
+			end
+		`S11 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S12), `off, `off, `off, `off, `off, `off};
+			end
+		`S12 : if(SW > 10'b0000001001) begin
+				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
+			end
+			else begin
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S12), `C, `L, `O, `S, `E, `D};
+			end
 		
 		default : ns = 4'bxxxx;
 		
