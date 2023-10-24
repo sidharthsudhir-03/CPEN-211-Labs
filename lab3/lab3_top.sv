@@ -45,8 +45,9 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   wire [`wid-1:0] ps, ns_rst;
   reg [`wid-1:0] ns;
   
-  vDFF #(`wid) STATE (clk, ns_rst, ps);
+  vDFF #(`wid) STATE(clk, ns_rst, ps);
   assign ns_rst = rst_n ? `S0 : ns;
+  assign LDR = SW;
   
   
   always @(*) begin
@@ -126,7 +127,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
 			end
 		
-		`S6 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `O, `P, `E, `N};
+		`S6 : {ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S6, `off, `off, `O, `P, `E, `N};
 				
 		`S7 : ns = `S8;
 		`S8 : ns = `S9;
@@ -134,20 +135,12 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 		`S10 : ns = `S11;
 		`S11 : ns = `S12;
 		`S12 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`C, `L, `O, `S, `E, `D};
+		`S13 : ns = `S13;
+		
 		default : ns = 4'bxxxx;
 		
 		endcase
   end
-  
-  /*
-  case(ps)
-  `S1 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
-  `S2 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
-  `S3 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `three};
-  `S4 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
-  `S5 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
-  `S6 : {HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
-  */
   
 endmodule
 
@@ -155,8 +148,8 @@ module vDFF (clk, in, out);
 	parameter n = 1;
 	input clk;
 	input [n-1:0] in;
-	output [n-1:0] out;
+	output reg [n-1:0] out;
 	always_ff @(posedge clk) begin
-		out = in;
+		out <= in;
 	end
 endmodule
