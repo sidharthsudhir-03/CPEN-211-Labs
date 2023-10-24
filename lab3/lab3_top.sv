@@ -29,24 +29,24 @@
   `define R 7'b1001110
   `define off 7'b1111111
 
-module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
+module lab3_temp(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
   input [9:0] SW;
   input [3:0] KEY;
   output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
   output [9:0] LEDR;   // optional: use these outputs for debugging on your DE1-SoC
 
   wire clk = ~KEY[0];  // this is your clock
-  wire rst_n = KEY[3]; // this is your reset; your reset should be synchronous and active-low
+  wire rst_n = ~KEY[3]; // this is your reset; your reset should be synchronous and active-low
 
   // put your solution code here!
   
-  wire [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+  reg [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
   wire [`wid-1:0] ps, ns_rst;
   reg [`wid-1:0] ns;
   
   vDFF #(`wid) STATE(clk, ns_rst, ps);
   assign ns_rst = rst_n ? `S0 : ns;
-  assign LDR = SW;
+  assign LEDR = SW;
   
   
   always @(*) begin
@@ -58,6 +58,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `seven};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S7;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -70,6 +71,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `zero};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S8;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -82,6 +84,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `three};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S9;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -94,6 +97,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S10;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -106,6 +110,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `six};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S11;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -118,6 +123,7 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `off, `off, `off, `off, `two};
 			end
 			else if(SW > 10'b0000001001) begin
+				ns = `S12;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
@@ -126,47 +132,54 @@ module lab3_top(SW,KEY,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,LEDR);
 			end
 		
 		`S6 : if(SW > 10'b0000001001) begin
+				ns = `S7;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S6), `off, `off, `O, `P, `E, `N};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S7, `off, `off, `O, `P, `E, `N};
 			end
 				
 		`S7 : if(SW > 10'b0000001001) begin
+				ns = `S8;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S8), `off, `off, `off, `off, `off, `off};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S8, `off, `off, `off, `off, `off, `off};
 			end
 		`S8 : if(SW > 10'b0000001001) begin
+				ns = `S9;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S9), `off, `off, `off, `off, `off, `off};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S9, `off, `off, `off, `off, `off, `off};
 			end
 		`S9 : if(SW > 10'b0000001001) begin
+				ns = `S10;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S10), `off, `off, `off, `off, `off, `off};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S10, `off, `off, `off, `off, `off, `off};
 			end
 		`S10 : if(SW > 10'b0000001001) begin
+				ns = `S11;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S11), `off, `off, `off, `off, `off, `off};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S11, `off, `off, `off, `off, `off, `off};
 			end
 		`S11 : if(SW > 10'b0000001001) begin
+				ns = `S12;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S12), `off, `off, `off, `off, `off, `off};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S12, `off, `off, `off, `off, `off, `off};
 			end
 		`S12 : if(SW > 10'b0000001001) begin
+				ns = `S12;
 				{HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`off, `E, `R, `R, `O, `R};
 			end
 			else begin
-				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {(rst_n ? `S0 : `S12), `C, `L, `O, `S, `E, `D};
+				{ns, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0} = {`S12, `C, `L, `O, `S, `E, `D};
 			end
 		
 		default : ns = 4'bxxxx;
@@ -181,7 +194,8 @@ module vDFF (clk, in, out);
 	input clk;
 	input [n-1:0] in;
 	output reg [n-1:0] out;
-	always_ff @(posedge clk) begin
+	
+	always_ff @ (posedge clk)
 		out <= in;
-	end
+	
 endmodule
