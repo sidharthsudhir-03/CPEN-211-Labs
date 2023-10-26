@@ -694,6 +694,4 @@ initial begin
     else $display("FAILED");
     $stop;
 end
-
-
 endmodule: tb_lab3
