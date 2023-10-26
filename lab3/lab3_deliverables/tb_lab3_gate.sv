@@ -697,4 +697,4 @@ initial begin
 end
 
 
-endmodule: tb_lab3
+endmodule: tb_lab3_gate
