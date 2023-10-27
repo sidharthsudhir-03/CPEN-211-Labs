@@ -1,0 +1,11 @@
+Partner 1 (Harnoor Saigal): 
+
+	- Developed and optimized code for combination lock
+	- Wrote up test cases in the testbench file
+	- Debugging
+
+Partner 2 (Sidharth Sudhir): 
+
+	- Developed and optimized code for combination lock
+	- Wrote up test cases in the testbench file
+	- Debugging
