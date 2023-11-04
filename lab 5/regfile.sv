@@ -15,14 +15,14 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 	assign w_en = writenum_onebit & {8{write}};
 	assign r_en = readnum_onebit & {8{~write}};
 
-	vDFFE(clk, w_en[7], data_in, R0);
-	vDFFE(clk, w_en[6], data_in, R1);
-	vDFFE(clk, w_en[5], data_in, R2);
-	vDFFE(clk, w_en[4], data_in, R3);
-	vDFFE(clk, w_en[3], data_in, R4);
-	vDFFE(clk, w_en[2], data_in, R5);
-	vDFFE(clk, w_en[1], data_in, R6);
-	vDFFE(clk, w_en[0], data_in, R7);
+	vDFFE(clk, w_en[0], data_in, R0);
+	vDFFE(clk, w_en[1], data_in, R1);
+	vDFFE(clk, w_en[2], data_in, R2);
+	vDFFE(clk, w_en[3], data_in, R3);
+	vDFFE(clk, w_en[4], data_in, R4);
+	vDFFE(clk, w_en[5], data_in, R5);
+	vDFFE(clk, w_en[6], data_in, R6);
+	vDFFE(clk, w_en[7], data_in, R7);
 
 	always_comb begin
 		case(r_en)
