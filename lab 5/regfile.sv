@@ -4,7 +4,7 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 	reg [2:0] writenum, readnum;
 	input write, clk;
 	output [15:0] data_out;
-	reg [15:0] data_out;
+	reg [15:0] data_in, data_out;
 	wire [7:0] writenum_onebit, readnum_onebit;
 	wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7;
 	wire [7:0] r_en;
@@ -13,7 +13,7 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 	Dec38 D1(writenum, writenum_onebit);
 	Dec38 D2(readnum, readnum_onebit);
 
-	assign r_en = readnum_onebit & {8{~write}};
+	assign r_en = readnum_onebit;
 
 	vDFFE LR1(clk, w_en[0], data_in, R0);
 	vDFFE LR2(clk, w_en[1], data_in, R1);
@@ -37,7 +37,7 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 			8'b00100000: data_out = R5;
 			8'b01000000: data_out = R6;
 			8'b10000000: data_out = R7;
-			default: data_out = {15{1'bx}};
+			default: data_out = {16{1'bx}};
 		endcase
 	end
 
@@ -46,7 +46,7 @@ endmodule: regfile
 
 
 module vDFFE(clk, en, in, out) ;
-  parameter n = 1; 
+  parameter n = 16; 
   input clk, en ;
   input  [n-1:0] in ;
   output [n-1:0] out ;
@@ -62,6 +62,6 @@ endmodule
 module Dec38(a, b) ;
   input  [2:0] a ;
   output [7:0] b ;
-  wire [7:0] b = 1 << a ;
+  wire [7:0] b = 8'b00000001 << a ;
 endmodule
 
