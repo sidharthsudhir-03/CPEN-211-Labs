@@ -7,24 +7,27 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 	reg [15:0] data_out;
 	wire [7:0] writenum_onebit, readnum_onebit;
 	wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7;
-	wire [7:0] w_en, r_en;
+	wire [7:0] r_en;
+	reg [7:0] w_en;
 
-	Dec38(writenum, writenum_onebit);
-	Dec38(readnum, readnum_onebit);
+	Dec38 D1(writenum, writenum_onebit);
+	Dec38 D2(readnum, readnum_onebit);
 
-	assign w_en = writenum_onebit & {8{write}};
 	assign r_en = readnum_onebit & {8{~write}};
 
-	vDFFE(clk, w_en[0], data_in, R0);
-	vDFFE(clk, w_en[1], data_in, R1);
-	vDFFE(clk, w_en[2], data_in, R2);
-	vDFFE(clk, w_en[3], data_in, R3);
-	vDFFE(clk, w_en[4], data_in, R4);
-	vDFFE(clk, w_en[5], data_in, R5);
-	vDFFE(clk, w_en[6], data_in, R6);
-	vDFFE(clk, w_en[7], data_in, R7);
+	vDFFE LR1(clk, w_en[0], data_in, R0);
+	vDFFE LR2(clk, w_en[1], data_in, R1);
+	vDFFE LR3(clk, w_en[2], data_in, R2);
+	vDFFE LR4(clk, w_en[3], data_in, R3);
+	vDFFE LR5(clk, w_en[4], data_in, R4);
+	vDFFE LR6(clk, w_en[5], data_in, R5);
+	vDFFE LR7(clk, w_en[6], data_in, R6);
+	vDFFE LR8(clk, w_en[7], data_in, R7);
 
 	always_comb begin
+		
+		w_en = writenum_onebit & {8{write}};
+		
 		case(r_en)
 			8'b00000001: data_out = R0;
 			8'b00000010: data_out = R1;
