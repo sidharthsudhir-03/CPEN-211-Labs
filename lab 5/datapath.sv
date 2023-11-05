@@ -1,4 +1,4 @@
-module datapath (clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loadc, loads, writenum, write, datapath_in, Z_out, datapath_out);
+module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loadc, loads, writenum, write, datapath_in, Z_out, datapath_out);
 
 	input [15:0] datapath_in;
 	input loada, loadb, loadc, loads, asel, bsel, vsel, clk, write;
@@ -17,14 +17,14 @@ module datapath (clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loa
 	reg [15:0] in, out;
 	wire [15:0] data_outa, data_outb, sout;
 	
-	vDFFE LR1(clk, loada, data_out, data_outa);
-	vDFFE LR2(clk, loadb, data_out, data_outb);
-	vDFFE LR3(clk, loadc, out, datapath_out);
+	vDFFE #(16)LR1(clk, loada, data_out, data_outa);
+	vDFFE #(16)LR2(clk, loadb, data_out, data_outb);
+	vDFFE #(16)LR3(clk, loadc, out, datapath_out);
 	vDFFE LR4(clk, loads, Z, Z_out);
 	
-	regfile U0(data_in,writenum,write,readnum,clk,data_regfile);
-	shifter U1(in, shift, sout);
-	alu U2(Ain, Bin, ALUop, ALUout, ALU_Z);
+	regfile REGFILE(data_in,writenum,write,readnum,clk,data_regfile);
+	shifter SHIFTER(in, shift, sout);
+	ALU ALU(Ain, Bin, ALUop, ALUout, ALU_Z);
 	
 	always_comb begin
 	
@@ -39,4 +39,4 @@ module datapath (clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loa
 	end
 		
 
-endmodule:datapath
+endmodule
