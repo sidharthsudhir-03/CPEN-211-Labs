@@ -15,14 +15,14 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 
 	assign r_en = readnum_onebit;
 
-	vDFFE LR1(clk, w_en[0], data_in, R0);
-	vDFFE LR2(clk, w_en[1], data_in, R1);
-	vDFFE LR3(clk, w_en[2], data_in, R2);
-	vDFFE LR4(clk, w_en[3], data_in, R3);
-	vDFFE LR5(clk, w_en[4], data_in, R4);
-	vDFFE LR6(clk, w_en[5], data_in, R5);
-	vDFFE LR7(clk, w_en[6], data_in, R6);
-	vDFFE LR8(clk, w_en[7], data_in, R7);
+	vDFFE #(16)LR1(clk, w_en[0], data_in, R0);
+	vDFFE #(16)LR2(clk, w_en[1], data_in, R1);
+	vDFFE #(16)LR3(clk, w_en[2], data_in, R2);
+	vDFFE #(16)LR4(clk, w_en[3], data_in, R3);
+	vDFFE #(16)LR5(clk, w_en[4], data_in, R4);
+	vDFFE #(16)LR6(clk, w_en[5], data_in, R5);
+	vDFFE #(16)LR7(clk, w_en[6], data_in, R6);
+	vDFFE #(16)LR8(clk, w_en[7], data_in, R7);
 
 	always_comb begin
 		
@@ -42,11 +42,11 @@ module regfile(data_in,writenum,write,readnum,clk,data_out);
 	end
 
 
-endmodule: regfile
+endmodule
 
 
 module vDFFE(clk, en, in, out) ;
-  parameter n = 16; 
+  parameter n = 1; 
   input clk, en ;
   input  [n-1:0] in ;
   output [n-1:0] out ;
