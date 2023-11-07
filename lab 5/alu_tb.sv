@@ -92,7 +92,7 @@ module ALU_tb();
 
 
     initial begin
-		 #500;
+		 #510;
 		 if (err === 0) begin
 			$display("PASSED: ALU module works as expected");
 		 end 
