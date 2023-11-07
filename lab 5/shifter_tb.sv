@@ -1,11 +1,11 @@
 module shifter_tb;
 
   reg [15:0] in;
-  reg err;
+  reg clk, err;
   reg [1:0] shift;
   wire [15:0] sout;
 
-  shifter DUT1(in,shift,sout);
+  shifter DUT(in,shift,sout);
   
   task shifter_check;
 	input [15:0] expected_sout;
@@ -16,8 +16,17 @@ module shifter_tb;
       $display("FAILED: shifter output = %b, expected output = %b", sout, expected_sout); 
     end
 	 
+	else begin
+		$display("PASSED: shifter output = %b, expected output = %b", sout, expected_sout); 
+		
+	end
   endtask
 	
+
+  initial forever begin
+    clk = 0; #5;
+    clk = 1; #5;
+  end
 
   initial begin
     err = 0;
@@ -34,7 +43,6 @@ module shifter_tb;
 	 shift = 2'd3;
 	 #10; shifter_check(16'b1101110101011011);
 	 
-	 
 	 in = 16'b1111000011001111;
 	 shift = 2'd0;
 	 #10; shifter_check(16'b1111000011001111);
@@ -47,7 +55,6 @@ module shifter_tb;
 	 
 	 shift = 2'd3;
 	 #10; shifter_check(16'b1111100001100111);
-	 
 	 
 	 in = 16'b1111111111111111;
 	 shift = 2'd0;
@@ -62,11 +69,16 @@ module shifter_tb;
 	 shift = 2'd3;
 	 #10; shifter_check(16'b1111111111111111);
 	 
-	 if (err === 0) begin
-      $display("PASSED: shifter module works as expected");
-    end 
-	$stop;	
-	 
-	end  
+	end
+
+
+    initial begin
+		 #500;
+		 if (err === 0) begin
+			$display("PASSED: regfile module works as expected");
+		 end 
+		$stop;	
+		
+	end
 
 endmodule
