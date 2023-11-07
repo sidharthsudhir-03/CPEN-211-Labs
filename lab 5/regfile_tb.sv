@@ -105,7 +105,7 @@ module regfile_tb;
 
 
     initial begin
-		 #500;
+		 #510;
 		 if (err === 0) begin
 			$display("PASSED: regfile module works as expected");
 		 end 
