@@ -1,7 +1,7 @@
 module shifter_tb;
 
   reg [15:0] in;
-  reg clk, err;
+  reg err;
   reg [1:0] shift;
   wire [15:0] sout;
 
@@ -18,11 +18,6 @@ module shifter_tb;
 	 
   endtask
 	
-
-  initial forever begin
-    clk = 0; #5;
-    clk = 1; #5;
-  end
 
   initial begin
     err = 0;
