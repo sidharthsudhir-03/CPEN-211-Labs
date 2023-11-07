@@ -5,7 +5,7 @@ module regfile_tb;
   reg write, clk, err;
   wire [15:0] data_out;
 
-  regfile DUT0(data_in,writenum,write,readnum,clk,data_out);
+  regfile DUT(data_in,writenum,write,readnum,clk,data_out);
   
   task regfile_checker;
 	input [15:0] expected_dataout;
@@ -100,15 +100,18 @@ module regfile_tb;
     writenum = 3;
     readnum = 5;
     #10; regfile_checker(16'h42);
-
-
-
-    if (err === 0) begin
-      $display("PASSED: regfile module works as expected");
-    end 
-	$stop;	
 	 
-	end  
+	end
+
+
+    initial begin
+		 #500;
+		 if (err === 0) begin
+			$display("PASSED: regfile module works as expected");
+		 end 
+		$stop;	
+		
+	end
 
 endmodule
 
