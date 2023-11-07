@@ -6,7 +6,7 @@ module ALU_tb();
   wire [15:0] aout;
   wire Z;
 
-  alu DUT(Ain,Bin,ALUop,aout,Z);
+  ALU DUT(Ain,Bin,ALUop,aout,Z);
   
   task alu_checker;
 	input[15:0] expected_aout;
@@ -88,16 +88,19 @@ module ALU_tb();
 	 #10; alu_checker(16'h0, 1'b1);
 	 
 	 
-	 if (err === 0) begin
-      $display("PASSED: ALU module works as expected");
-    end 
-	$stop;	
-	 
-	end  
+	end
+
+
+    initial begin
+		 #500;
+		 if (err === 0) begin
+			$display("PASSED: ALU module works as expected");
+		 end 
+		$stop;	
+		
+	end
 
 endmodule
-	 
-	 
 	 
 
     
