@@ -316,7 +316,7 @@ skip:
  //startIndex = middleIndex +1;
  //}
     CMP R8, R1
-    BLT else
+    BLE else
     SUB R4, R5, #1
     B do
 
