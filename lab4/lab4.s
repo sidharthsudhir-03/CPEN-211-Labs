@@ -277,7 +277,7 @@ numbers:
 
 
 //int binary_search ( int * numbers , int key , int length )
-.global binary_search
+.globl binary_search
 binary_search:
  //{ R0 numbers, R1 key, R2 length
  //int startIndex = 0;
@@ -299,7 +299,7 @@ binary_search:
  //if ( startIndex > endIndex )
     CMP R3, R4
  //break ;
-    BGE done
+    BGT done
 
  //else if ( numbers [ middleIndex ] == key )
     LDR R8, [R0, R5, LSL#2]
@@ -316,7 +316,7 @@ skip:
  //startIndex = middleIndex +1;
  //}
     CMP R8, R1
-    BLE else
+    BLT else
     SUB R4, R5, #1
     B do
 
@@ -326,7 +326,9 @@ else:
 
 do:
  //numbers [ middleIndex ] = - NumIters ;
-    RSB R8, R7, #0
+    MOV R10, R7
+	NEG R10, R10
+	STR R10, [R0, R5, LSL#2]
 
  //middleIndex = startIndex + ( endIndex - startIndex )/2;
     SUB R9, R4,R3
