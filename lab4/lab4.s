@@ -276,68 +276,72 @@ numbers:
 .fill 100,4,0xDEADBEEF   // set 100 locations to easily recognizable "bad" value
 
 
-
-//LAB4.S FILE (BINARYSEARCH)
+//int binary_search ( int * numbers , int key , int length )
+.global binary_search
 binary_search:
-  
-  //r0 is number
-  // r1 is key
-  // r2 is length 
-  // r3 is startIndex
-  // r4 is endIndex
-  // r5 middleIndex
-  // r6 keyIndex
-  // r7 NumIters
-  // r8 numbers[middleIndex]
-  //Unused variables 
-  
-  MOV R3, #0 //startIndex = 0
-  SUB R4, R2, #1 //endIndex = length - 1
-  MOV R5, R4, LSR #1 // middleIndex = endIndex/2
-  MOV R6, #1
-  NEG R6, R6 // keyIndex = -1
-  MOV R7, #1 //NumIters = 1
-  MOV R9, #1
-  NEG R9, R9 //temp = -1
-  B while_loop
-  
-while_loop:
+ //{ R0 numbers, R1 key, R2 length
+ //int startIndex = 0;
+ MOV R3, #0 // R3 startIndex
+ //int endIndex = length - 1;
+ SUB R4, R2, #1 // R4 endIndex
+ //int middleIndex = endIndex /2;
+ MOV R5, R4, LSR#1 //R5 middleIndex
+ //int keyIndex = -1;
+ MOV R6, #-1 //R6 keyIndex
+ //int NumIters = 1;
+ MOV R7, #1 //R7 NumIters
 
-  CMP R6, R9
-  BNE return_keyIndex 
-  CMP R3,R4
-  BGT return_keyIndex
-  LDR R8, [R0, R5, LSL#2]
-  CMP R8, R1
-  BEQ else_if_one
-  CMP R8, R1
-  BGT else_if_two
-  ADD R3, R5, #1
-  B remaining_while_loop
-  
-remaining_while_loop:
+ //while ( keyIndex == -1) {
+ loop:
+    CMP R6, #-1
+    BNE done
+    //
+ //if ( startIndex > endIndex )
+    CMP R3, R4
+ //break ;
+    BGE done
 
-  MOV R11, R7
-  NEG R11, R11
-  STR R11, [R0, R5, LSL #2]
-  SUB R10, R4, R3
-  MOV R10, R10, LSR #1
-  ADD R5, R3, R10
-  ADD R7, R7, #1
-  B while_loop
-  
-else_if_one:
+ //else if ( numbers [ middleIndex ] == key )
+    LDR R8, [R0, R5, LSL#2]
+    CMP R8, R1
+    BNE skip
+ //keyIndex = middleIndex ;
+    MOV R6, R5
+    B do
 
-  MOV R6, R5
-  B remaining_while_loop
-  
-else_if_two:
+skip:
+ //else if ( numbers [ middleIndex ] > key ) {
+ //endIndex = middleIndex -1;
+ //} else {
+ //startIndex = middleIndex +1;
+ //}
+    CMP R8, R1
+    BLE else
+    SUB R4, R5, #1
+    B do
 
-  SUB R4, R5, #1
-  B remaining_while_loop
-  
-  
-return_keyIndex:
-  MOV R0, R6
-  MOV PC,LR
-  
+else:
+    ADD R3, R5, #1
+    B do
+
+do:
+ //numbers [ middleIndex ] = - NumIters ;
+    RSB R8, R7, #0
+
+ //middleIndex = startIndex + ( endIndex - startIndex )/2;
+    SUB R9, R4,R3
+    MOV R9, R9, LSR#1
+    ADD R5, R3, R9
+   
+ //NumIters ++;
+ ADD R7, R7, #1
+ //} end while
+ B loop
+
+ done:
+ //return keyIndex ;
+ MOV R0, R6
+ MOV PC, LR
+ //}
+
+ 
