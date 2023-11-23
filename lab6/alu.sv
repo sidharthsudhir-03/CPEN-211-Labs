@@ -16,10 +16,10 @@ always_comb begin
    //different alu operations to be executed based on ALUop
 	case(ALUop)
 		2'b00: {out, status} = {Ain + Bin, 3'bxxx};
-		2'b01: {out, status} = {{16{1'bx}}, (ovf_out[15] == 1'b1) ? 1'b1 : 1'b0, (ovf_out[16] == 1'b1) ? 1'b1 : 1'b0, (ovf_out[15:0] == {16{1'b0}}) ? 1'b1 : 1'b0} ;
+		2'b01: {out, status} = {{16{1'bx}}, (ovf_out[15] == 1'b1) ? 1'b1 : 1'b0, (ovf_out[16] != ovf_out[15]) ? 1'b1 : 1'b0, (ovf_out[15:0] == {16{1'b0}}) ? 1'b1 : 1'b0} ;
 		2'b10: {out, status} = {Ain & Bin, 3'bxxx};
 		2'b11: {out, status} = {~Bin, 3'bxxx};	
-		default: out = {16{1'bx}};
+		default: {out, status} = {19{1'bx}};
 	endcase
 	
 	
