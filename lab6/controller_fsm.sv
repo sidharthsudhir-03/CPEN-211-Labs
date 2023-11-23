@@ -27,7 +27,7 @@ module controller_fsm(clk, s, reset, opcode, op, nsel, loada, loadb, loadc, load
 	`define write_imm 5'b01111
 	`define write_rd_mov 5'b10000
 	`define write_rd_add 5'b10001
-	`define write_rd_cmp 5'b10010
+	`define write_status 5'b10010
 	`define write_rd_and 5'b10011
 	`define write_rd_mvn 5'b10100
 
@@ -73,15 +73,15 @@ module controller_fsm(clk, s, reset, opcode, op, nsel, loada, loadb, loadc, load
 			{`get_rn_and, 6'bxxxxxx}: next = {`and_op, 13'b0000110000000};
 			{`mvn_op, 6'bxxxxxx}: next = {`write_rd_mvn, 13'b00xxx00101000};
 		
-			{`write_rd_mov, 6'bxxxxxx}: next = {`Wait, 13'b1001000000010};	
+			{`write_rd_mov, 6'bxxxxxx}: next = {`Wait, 13'b0001000000010};	
 			{`add_op, 6'bxxxxxx}: next = {`write_rd_add, 13'b00xxx00100000};
-			{`cmp_op, 6'bxxxxxx}: next = {`write_rd_cmp, 13'b00xxx00100000};
+			{`cmp_op, 6'bxxxxxx}: next = {`write_status, 13'b00xxx00100000};
 			{`and_op, 6'bxxxxxx}: next = {`write_rd_and, 13'b00xxx00100000};
-			{`write_rd_mvn, 6'bxxxxxx}: next = {`Wait, 13'b1000100000010};
+			{`write_rd_mvn, 6'bxxxxxx}: next = {`Wait, 13'b0000100000010};
 			
-			{`write_rd_add, 6'bxxxxxx}: next = {`Wait, 13'b1001000000010};
-			{`write_rd_cmp, 6'bxxxxxx}: next = {`Wait, 13'b1001000000010};
-			{`write_rd_and, 6'bxxxxxx}: next = {`Wait, 13'b1001000000010};
+			{`write_rd_add, 6'bxxxxxx}: next = {`Wait, 13'b0001000000010};
+			{`write_status, 6'bxxxxxx}: next = {`Wait, 13'b00xxx00010000};
+			{`write_rd_and, 6'bxxxxxx}: next = {`Wait, 13'b0001000000010};
 			
 			default: next = {18{1'bx}};
 			
