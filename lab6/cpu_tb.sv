@@ -265,7 +265,7 @@ module cpu_tb;
     s = 0;
     @(posedge w); // wait for w to go high again
     #10;
-    if (cpu_tb.DUT.N !== 1'b1 && cpu_tb.DUT.V !== 1'b0 && cpu_tb.DUT.Z !== 1'b0) begin
+    if ({N,V,Z} != 3'b100) begin
       err = 1;
       $display("FAILED: CMP R7, R3, LSR#1");
       $stop;
@@ -331,7 +331,7 @@ module cpu_tb;
     s = 0;
     @(posedge w); // wait for w to go high again
     #10;
-    if (cpu_tb.DUT.N !== 1'b0 && cpu_tb.DUT.V !== 1'b0 && cpu_tb.DUT.Z !== 1'b1) begin
+    if ({N,V,Z} != 3'b001) begin
       err = 1;
       $display("FAILED: CMP R6, R0");
       $stop;
@@ -343,8 +343,8 @@ module cpu_tb;
 	 
 	 @(negedge clk); // wait for falling edge of clock before changing inputs
 	 
-	 //MOV R4, #1
-	 in = {3'b110, 2'b10, 3'd4, 8'h1}; //{opcode, op, rn, im8}
+	 //MOV R4, #7F
+	 in = {3'b110, 2'b10, 3'd4, 8'h7F}; //{opcode, op, rn, im8}
     load = 1;
     #10;
     load = 0;
@@ -353,18 +353,20 @@ module cpu_tb;
     s = 0;
     @(posedge w); // wait for w to go high again
     #10;
-    if (cpu_tb.DUT.DP.REGFILE.R4 !== 16'h1) begin
+    if (cpu_tb.DUT.DP.REGFILE.R4 !== 16'h7F) begin
       err = 1;
-      $display("FAILED: MOV R4, #1");
+      $display("FAILED: MOV R4, #7F");
       $stop;
     end
 	 else begin
 		err = 0;
-		$display("PASSED: MOV R4, #1");
+		$display("PASSED: MOV R4, #7F");
 	 end
 	 
-	 //CMP R4, R7
-	 in = {3'b101, 2'b01, 3'd4, 3'd0, 2'b00, 3'd7}; //{opcode, op, rn, rd, sh, rm}
+	  @(negedge clk); // wait for falling edge of clock before changing inputs
+	 
+	 //MOV R5, #1
+	 in = {3'b110, 2'b10, 3'd5, 8'h1}; //{opcode, op, rn, im8}
     load = 1;
     #10;
     load = 0;
@@ -373,16 +375,82 @@ module cpu_tb;
     s = 0;
     @(posedge w); // wait for w to go high again
     #10;
-    if (cpu_tb.DUT.N !== 1'b0 && cpu_tb.DUT.V !== 1'b1 && cpu_tb.DUT.Z !== 1'b0) begin
+    if (cpu_tb.DUT.DP.REGFILE.R5 !== 16'h1) begin
       err = 1;
-      $display("FAILED: CMP R4, R7");
+      $display("FAILED: MOV R5, #1");
       $stop;
     end
 	 else begin
 		err = 0;
-		$display("PASSED: CMP R4, R7");
+		$display("PASSED: MOV R5, #1");
 	 end
-		
+	 
+	 @(negedge clk); // wait for falling edge of clock before changing inputs
+	 
+	 //MVN R6, R5
+	 in = {3'b101, 2'b11, 3'd0, 3'd6, 2'b00, 3'd5}; //{opcode, op, rn, rd, sh, rm}
+    load = 1;
+    #10;
+    load = 0;
+    s = 1;
+    #10
+    s = 0;
+    @(posedge w); // wait for w to go high again
+    #10;
+    if (cpu_tb.DUT.DP.REGFILE.R6 !== 16'hFFFE) begin
+      err = 1;
+      $display("FAILED: MVN R6, R5");
+      $stop;
+    end
+	 else begin
+		err = 0;
+		$display("PASSED: MVN R6, R5");
+	 end
+	 
+	 
+	 @(negedge clk); // wait for falling edge of clock before changing inputs
+	 
+	 //ADD R6, R6, R5
+	 in = {3'b101, 2'b00, 3'd6, 3'd6, 2'b00, 3'd5}; //{opcode, op, rn, rd, sh, rm}
+    load = 1;
+    #10;
+    load = 0;
+    s = 1;
+    #10
+    s = 0;
+    @(posedge w); // wait for w to go high again
+    #10;
+    if (cpu_tb.DUT.DP.REGFILE.R6 !== 16'hFFFF) begin
+      err = 1;
+      $display("FAILED: ADD R6, R6, R5");
+      $stop;
+    end
+	 else begin
+		err = 0;
+		$display("PASSED: ADD R6, R6, R5");
+	 end
+	 
+	 @(negedge clk); // wait for falling edge of clock before changing inputs
+	 
+	 //CMP R6, R4
+	 in = {3'b101, 2'b01, 3'd6, 3'd0, 2'b00, 3'd4}; //{opcode, op, rn, rd, sh, rm}
+    load = 1;
+    #10;
+    load = 0;
+    s = 1;
+    #10
+    s = 0;
+    @(posedge w); // wait for w to go high again
+    #10;
+    if (cpu_tb.DUT.N !== 1'b1 & cpu_tb.DUT.V !== 1'b1 & cpu_tb.DUT.Z !== 1'b0) begin
+      err = 1;
+      $display("FAILED: CMP R6, R4");
+      $stop;
+    end
+	 else begin
+		err = 0;
+		$display("PASSED: CMP R6, R4");
+	 end
 		
 	 
     if (~err) $display("PASSED: CPU WORKS AS EXPECTED");
