@@ -1,4 +1,4 @@
-module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loadc, loads, writenum, write, mdata, sximm8, sximm5, PC, N, V, Z, C);
+module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, loadc, loads, writenum, write, mdata, sximm8, sximm5, PC, N, V, Z, out);
 
 	//initializing all inputs
 	input [15:0] mdata, sximm8, sximm5;
@@ -11,20 +11,21 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 	
 	//initializing all outputs
 	output N, V, Z;
-	output [15:0] C;
+	output [15:0] out;
 	
 	
 	//initializing all necessary wires and regs to avoid illegal declaration
 	wire ALU_Z; //value of Z that comes out of the ALU unit
 	reg Z; //assigned the value of ALU_Z in a combinational block to pass to load enable register
-	reg [15:0] data_in, data_out, Ain, Bin, in, out; //all necessary inputs to different instantiated modules
+	reg [15:0] data_in, data_out, Ain, Bin, in, out_load; //all necessary inputs to different instantiated modules
 	wire [15:0] data_regfile, ALUout, data_outa, data_outb, sout; //all necessary outputs to different instantiated modules
 	wire[2:0] status, status_out;
 	reg [2:0] status_in; 
+	wire[15:0] C;
 	
 	vDFFE #(16)LR1(clk, loada, data_out, data_outa); //loada register
 	vDFFE #(16)LR2(clk, loadb, data_out, data_outb); //loadb register
-	vDFFE #(16)LR3(clk, loadc, out, C);   //loadc register
+	vDFFE #(16)LR3(clk, loadc, out_load, C);   //loadc register
 	vDFFE LR4(clk, loads, status_in, status_out); //loads register
 	
 	regfile REGFILE(data_in,writenum,write,readnum,clk,data_regfile); //regfile module
@@ -41,7 +42,7 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 		in = data_outb; //output from loadb register to input for shifter module
 		Ain = asel ? {16{1'b0}} : data_outa;
 		Bin = bsel ? sximm5 : sout;
-		out = ALUout; // output wire from ALU module to input reg for loadc register
+		out_load = ALUout; // output wire from ALU module to input reg for loadc register
 		status_in = status; //Z output wire from ALU module as input reg for loads register
 		
 	end
@@ -49,6 +50,7 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 	assign N = status_out[2];
 	assign V = status_out[1];
 	assign Z = status_out[0];
+	assign out = C;
 	
 		
 
