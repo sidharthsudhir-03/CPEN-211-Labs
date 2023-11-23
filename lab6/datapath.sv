@@ -15,8 +15,6 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 	
 	
 	//initializing all necessary wires and regs to avoid illegal declaration
-	wire ALU_Z; //value of Z that comes out of the ALU unit
-	reg Z; //assigned the value of ALU_Z in a combinational block to pass to load enable register
 	reg [15:0] data_in, data_out, Ain, Bin, in, out_load; //all necessary inputs to different instantiated modules
 	wire [15:0] data_regfile, ALUout, data_outa, data_outb, sout; //all necessary outputs to different instantiated modules
 	wire[2:0] status, status_out;
@@ -26,7 +24,7 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 	vDFFE #(16)LR1(clk, loada, data_out, data_outa); //loada register
 	vDFFE #(16)LR2(clk, loadb, data_out, data_outb); //loadb register
 	vDFFE #(16)LR3(clk, loadc, out_load, C);   //loadc register
-	vDFFE LR4(clk, loads, status_in, status_out); //loads register
+	vDFFE #(3) LR4(clk, loads, status_in, status_out); //loads register
 	
 	regfile REGFILE(data_in,writenum,write,readnum,clk,data_regfile); //regfile module
 	shifter SHIFTER(in, shift, sout); //shifter module
