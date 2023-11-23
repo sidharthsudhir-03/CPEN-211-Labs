@@ -142,6 +142,27 @@ module sseg(in,segs);
   //            14 | E
   //            15 | F
 
-  assign segs = 7'b0001110;  // this will output "F" 
+    always_comb begin 
+  
+	  case(in)
+		4'b0000: segs = `ZERO;
+		4'b0001: segs = `ONE;
+		4'b0010: segs = `TWO;
+		4'b0011: segs = `THREE;
+		4'b0100: segs = `FOUR;
+		4'b0101: segs = `FIVE;
+		4'b0110: segs = `SIX;
+		4'b0111: segs = `SEVEN;
+		4'b1000: segs = `EIGHT;
+		4'b1001: segs = `NINE;
+		4'b1010: segs = `A;
+		4'b1011: segs = `B;
+		4'b1100: segs = `C;
+		4'b1101: segs = `D;
+		4'b1110: segs = `E;
+		4'b1111: segs = `F;
+		default: segs = 7'bxxxxxxx;
+	  endcase
+	end  
 
 endmodule
