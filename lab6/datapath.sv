@@ -19,7 +19,7 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 	wire [15:0] data_regfile, ALUout, data_outa, data_outb, sout; //all necessary outputs to different instantiated modules
 	wire[2:0] status, status_out;
 	reg [2:0] status_in; 
-	wire[15:0] C;
+	wire[15:0] C; //formerly datapath_out
 	
 	vDFFE #(16)LR1(clk, loada, data_out, data_outa); //loada register
 	vDFFE #(16)LR2(clk, loadb, data_out, data_outb); //loadb register
@@ -39,12 +39,13 @@ module datapath(clk, readnum, vsel, loada, loadb, shift, asel, bsel, ALUop, load
 		data_out = data_regfile; //output from regfile to input to loada or loadb register
 		in = data_outb; //output from loadb register to input for shifter module
 		Ain = asel ? {16{1'b0}} : data_outa;
-		Bin = bsel ? sximm5 : sout;
+		Bin = bsel ? sximm5 : sout; //change made to B mux
 		out_load = ALUout; // output wire from ALU module to input reg for loadc register
 		status_in = status; //Z output wire from ALU module as input reg for loads register
 		
 	end
 	
+	//three bit status values written to N, V, and Z respectively
 	assign N = status_out[2];
 	assign V = status_out[1];
 	assign Z = status_out[0];
