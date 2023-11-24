@@ -442,7 +442,7 @@ module cpu_tb;
     s = 0;
     @(posedge w); // wait for w to go high again
     #10;
-    if (cpu_tb.DUT.N !== 1'b1 & cpu_tb.DUT.V !== 1'b1 & cpu_tb.DUT.Z !== 1'b0) begin
+    if ({N,V,Z} != 3'b100) begin
       err = 1;
       $display("FAILED: CMP R6, R4");
       $stop;
