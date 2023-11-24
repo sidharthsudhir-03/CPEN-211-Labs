@@ -7,6 +7,8 @@ module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	wire[15:0]in_load; //load register port
 	
 	//idecoder ports
+	//regs signify input
+	//wires signify output
 	reg[2:0] nsel_id;
 	reg [15:0] instruction_id;
 	wire[15:0] sximm5_id, sximm8_id;
@@ -15,6 +17,8 @@ module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	wire[2:0] readnum_id;
 	
 	//datpath ports
+	//regs signify input
+	//wires signify output
 	reg [15:0] mdata, sximm8_data, sximm5_data;
 	reg[7:0] PC;
 	reg loada_data, loadb_data, loadc_data, loads_data, asel_data, bsel_data, write_data;
@@ -23,17 +27,22 @@ module cpu(clk,reset,s,load,in,out,N,V,Z,w);
 	reg[1:0] shift_data, ALUop_data;
 	
 	//controller_fsm ports
+	//regs signify input
+	//wires signify output
 	reg[2:0] opcode_fsm;
 	reg[1:0] op_fsm;
 	wire loada_fsm, loadb_fsm, loadc_fsm, loads_fsm, asel_fsm, bsel_fsm, write_fsm;
 	wire[1:0] vsel_fsm;
 	wire[2:0] nsel_fsm;
 	
+	//initializing all the high level modules
 	vDFFE #(16) IF(clk, load, in, in_load);
 	idecoder ID(instruction_id, nsel_id, ALUop_id, sximm5_id, sximm8_id, shift_id, readnum_id, writenum_id, opcode_id, op_id);
 	datapath DP(clk, readnum_data, vsel_data, loada_data, loadb_data, shift_data, asel_data, bsel_data, ALUop_data, loadc_data, loads_data, writenum_data, write_data, mdata, sximm8_data, sximm5_data, PC, N, V, Z, out);
 	controller_fsm  FSM(clk, s, reset, opcode_fsm, op_fsm, nsel_fsm, loada_fsm, loadb_fsm, loadc_fsm, loads_fsm, asel_fsm, bsel_fsm, vsel_fsm, write_fsm, w);
 	
+	//this always block is used to connect the ports across the different modules
+	//the values of the outputs (wires) are assigned to the inputs of other modules (regs)
 	always_comb begin 
 	
 		mdata =16'b0;
