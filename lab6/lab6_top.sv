@@ -76,16 +76,6 @@ module input_iface(clk, SW, ir, LEDR);
   assign LEDR = sel_sw ? ir[7:0] : ir[15:8];  
 endmodule         
 
-module vDFF(clk,D,Q);
-  parameter n=1;
-  input clk;
-  input [n-1:0] D;
-  output [n-1:0] Q;
-  reg [n-1:0] Q;
-  always @(posedge clk)
-    Q <= D;
-endmodule
-
 // The sseg module below can be used to display the value of datpath_out on
 // the hex LEDS the input is a 4-bit value representing numbers between 0 and
 // 15 the output is a 7-bit value that will print a hexadecimal digit.  You
@@ -94,6 +84,24 @@ endmodule
 // the book is not the same as on the DE1-SoC (see comments below).
 
 module sseg(in,segs);
+
+  `define ZERO 7'b1000000
+  `define ONE 7'b1111001
+  `define TWO 7'b0100100
+  `define THREE 7'b0110000
+  `define FOUR 7'b0011001
+  `define FIVE 7'b0010010
+  `define SIX 7'b0000010
+  `define SEVEN 7'b1111000
+  `define EIGHT 7'b0000000
+  `define NINE 7'b0010000
+  `define A 7'b0001000
+  `define B 7'b0000000
+  `define C 7'b1000110
+  `define D 7'b1000000
+  `define E 7'b0000110
+  `define F 7'b0001110
+  
   input [3:0] in;
   output [6:0] segs;
 
