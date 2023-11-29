@@ -1,4 +1,4 @@
-module RAM(clk,read_address,write_address,write,din,dout);
+module ram(clk,read_address,write_address,write,din,dout);
   parameter data_width = 16; 
   parameter addr_width = 8;
   parameter filename = "data.txt";
