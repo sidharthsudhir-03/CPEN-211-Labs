@@ -71,7 +71,7 @@ module controller_fsm(clk, reset, opcode, op, nsel, loada, loadb, loadc, loads, 
 	output[2:0] nsel;//output that goes to the instruction decoder
 	
 	wire[4:0] fsm_in;//all inputs of fsm except reset
-	reg[23:0] next;//this reg involes the next state that the machine jumps to and all the outputs of the module
+	reg[24:0] next;//this reg involes the next state that the machine jumps to and all the outputs of the module
 	reg[`SW-1:0] next_state;
 	wire[`SW-1:0] present_state, next_state_reset;//next_state_reset is the state that updates the value of next state depending on value of reset
 	
@@ -148,7 +148,7 @@ module controller_fsm(clk, reset, opcode, op, nsel, loada, loadb, loadc, loads, 
 			{`get_ldr_addr, 5'bxxxxx}: next = {`get_data_addr_ldr, `MNONE, 17'b00xxx001001000000};
 			{`get_data_addr_ldr, 5'bxxxxx}: next = {`read_addr_ldr, `MNONE, 17'b00xxx000000000001};
 			{`read_addr_ldr, 5'bxxxxx}: next = {`write_rd_ldr, `MREAD, 17'b00xxx000000000000};
-			{`write_rd_ldr, 5'bxxxxx}: next = {`IF1, `MNONE, 17'b11010000000100000};
+			{`write_rd_ldr, 5'bxxxxx}: next = {`IF1, `MREAD, 17'b11010000000100000};
 			
 			//str instructions stages
 			{`get_rn_str, 5'bxxxxx}: next = {`get_str_addr, `MNONE, 17'b00001100000000000};
