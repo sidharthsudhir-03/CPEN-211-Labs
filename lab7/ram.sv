@@ -3,6 +3,7 @@ module ram(clk,read_address,write_address,write,din,dout);
   parameter addr_width = 8;
   parameter filename = "data.txt";
 
+  //Initializing I/Os
   input clk;
   input [addr_width-1:0] read_address, write_address;
   input write;
@@ -10,9 +11,9 @@ module ram(clk,read_address,write_address,write,din,dout);
   output [data_width-1:0] dout;
   reg [data_width-1:0] dout;
 
-  reg [data_width-1:0] mem [2**addr_width-1:0];
+  reg [data_width-1:0] mem [2**addr_width-1:0]; //this bus array holds all the instructions from the 'data.txt' files
 
-  initial $readmemb(filename, mem);
+  initial $readmemb(filename, mem); //reads instruction into mem bus array
 
   always @ (posedge clk) begin
     if (write)

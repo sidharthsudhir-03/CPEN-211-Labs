@@ -1,15 +1,12 @@
 module lab7_top(KEY,SW,LEDR,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5);
 
-	`define N 7'b1001000
-	`define V 7'b1000001
-	`define Z 7'b0100100
-
+	//initializing I/Os
 	input[3:0]KEY; 
 	input[9:0]SW; 
 	output[9:0]LEDR; 
 	output reg[6:0]HEX0,HEX1,HEX2,HEX3,HEX4,HEX5;
 	
-	//wire|regs instantiations
+	//wire instantiations
 	wire dout_en, sw_en, ledr_load;
 	
 	//cpu I/O ports
@@ -29,33 +26,38 @@ module lab7_top(KEY,SW,LEDR,HEX0,HEX1,HEX2,HEX3,HEX4,HEX5);
 	cpu CPU(KEY[0], ~KEY[1], read_data_cpu, mem_cmd, mem_addr, write_data, N, V, Z);
 	ram MEM(KEY[0],read_address,write_address,write,din,dout);
 	vDFFE #(8) LED_R(KEY[0], ledr_load, write_data[7:0], LEDR[7:0]);
+	//to read write_data value after each instruction executed (in hexadecimal)
 	sseg H0(write_data[3:0],   HEX0);
 	sseg H1(write_data[7:4],   HEX1);
 	sseg H2(write_data[11:8],  HEX2);
 	sseg H3(write_data[15:12], HEX3);
 
-
+	//displaying status from the datapath onto HEX5
 	assign HEX5[0] = ~Z;
 	assign HEX5[6] = ~N;
 	assign HEX5[3] = ~V;
-	assign HEX4 = {7{1'b1}};
-	assign {HEX5[2:1],HEX5[5:4]} = 4'b1111; // disabled
-	assign LEDR[9:8] = 2'b00;
-	assign dout_en = (mem_cmd == 2'b10) & (mem_addr[8] == 1'b0);
-	assign sw_en =  (mem_cmd == 2'b10) & (mem_addr == 9'h140);
-	assign ledr_load = (mem_cmd == 2'b11) & (mem_addr == 9'h100);
+	
+	assign HEX4 = {7{1'b1}}; //disabled
+	assign {HEX5[2:1],HEX5[5:4]} = 4'b1111; //disabled
+	assign LEDR[9:8] = 2'b00; //disabled
+	assign dout_en = (mem_cmd == 2'b10) & (mem_addr[8] == 1'b0); //combinational logic block to assign enable value for reading value from memory
+	assign sw_en =  (mem_cmd == 2'b10) & (mem_addr == 9'h140); //combinational logic block to assign enable value for reading slider input
+	assign ledr_load = (mem_cmd == 2'b11) & (mem_addr == 9'h100); //combinational logic block to assign enable value for LEDR load register
 	
 	always_comb begin
 
 		read_address = mem_addr[7:0];
 		write_address = mem_addr[7:0];
 		din = write_data;
-		read_data_cpu = dout_en ? dout : sw_en ? {8'b0, SW[7:0]} : 16'b0;
-		write = (mem_cmd == 2'b11) & (mem_addr[8] == 1'b0); 
+		read_data_cpu = dout_en ? dout : sw_en ? {8'b0, SW[7:0]} : 16'b0; //combinational logic to determine read_addr between dout and slider input
+		write = (mem_cmd == 2'b11) & (mem_addr[8] == 1'b0); //combinational logic to determine read_addr 
 		
 	end
 	
 endmodule
+
+
+//module to display value of write_data onto {HEX3, HEX2, HEX1, HEX0}
 
 module sseg(in,segs);
 

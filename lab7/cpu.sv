@@ -1,4 +1,6 @@
 module cpu(clk, reset, read_data, mem_cmd, mem_addr, write_data, N, V, Z);
+
+	//initializing I/Os
 	input reg clk, reset;
 	input reg [15:0] read_data;
 	output [15:0] write_data;
@@ -38,9 +40,9 @@ module cpu(clk, reset, read_data, mem_cmd, mem_addr, write_data, N, V, Z);
 	
 	
 	//initializing all the high level modules
-	vDFFE #(9) PCR(clk, load_pc, next_pc, PC);
-	vDFFE #(9) DAR(clk, load_addr, write_data[8:0], data_addr);
-	vDFFE #(16) IR(clk, load_ir, read_data, in_load);
+	vDFFE #(9) PCR(clk, load_pc, next_pc, PC); //program counter register
+	vDFFE #(9) DAR(clk, load_addr, write_data[8:0], data_addr);//data address register
+	vDFFE #(16) IR(clk, load_ir, read_data, in_load);//instruction register
 	idecoder ID(instruction_id, nsel_id, ALUop_id, sximm5_id, sximm8_id, shift_id, readnum_id, writenum_id, opcode_id, op_id);
 	datapath DP(clk, readnum_data, vsel_data, loada_data, loadb_data, shift_data, asel_data, bsel_data, ALUop_data, loadc_data, loads_data, writenum_data, w_data, mdata, sximm8_data, sximm5_data, PC_data, N, V, Z, write_data);
 	controller_fsm  FSM(clk, reset, opcode_fsm, op_fsm, nsel_fsm, loada_fsm, loadb_fsm, loadc_fsm, loads_fsm, asel_fsm, bsel_fsm, vsel_fsm, w_fsm, reset_pc, load_pc, load_ir, mem_cmd, addr_sel, load_addr);

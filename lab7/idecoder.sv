@@ -1,5 +1,6 @@
 module idecoder(instruction, nsel, ALUop, sximm5, sximm8, shift, readnum, writenum, opcode, op);
 
+	//Initializing I/Os 
 	input[15:0] instruction;
 	input[2:0] nsel;
 	output[15:0] sximm5, sximm8;
@@ -8,6 +9,7 @@ module idecoder(instruction, nsel, ALUop, sximm5, sximm8, shift, readnum, writen
 	wire[2:0] Rn, Rd, Rm;
 	output reg[2:0] readnum;
 	
+	//assigning cpu operations from instruction input
 	assign sximm5 = {{11{instruction[4]}}, instruction[4:0]};
 	assign sximm8 = {{8{instruction[7]}}, instruction[7:0]};
 	assign ALUop = instruction[12:11];
@@ -20,6 +22,7 @@ module idecoder(instruction, nsel, ALUop, sximm5, sximm8, shift, readnum, writen
 	
 	always_comb begin 
 	
+		//3 input mux to select between Rn, Rd, and Rm
 		case(nsel)
 			
 			3'b001: readnum = Rn;
