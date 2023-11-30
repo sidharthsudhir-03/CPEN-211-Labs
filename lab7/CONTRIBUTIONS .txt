@@ -1,0 +1,15 @@
+Partner 1 (Harnoor Saigal): 
+
+	- Wrote up ram module from slides
+	- Updating and debugging controller_fsm.sv, cpu.sv
+	- Wrote up test cases in the testbench file: tb_lab7_top.sv
+	- Wrote up lab7_top.sv Stage 1 
+	- Debugging
+
+Partner 2 (Sidharth Sudhir): 
+
+	- Updating and debugging controller_fsm.sv, cpu.sv
+	- Wrote up test cases in the testbench file: tb_lab7_top.sv
+	- Wrote up lab7_top.sv Stage 2, Stage 3 
+	- Writing assembly code and extracting data.txt file from cygwin
+	- Debugging
