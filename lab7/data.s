@@ -14,9 +14,9 @@
     LDR R4, [R0]              ; R4 = SW_INPUT 
     CMP R4, R3                ; Compare SW_INPUT with 76
     ADD R2, R4, R3, LSR #1    ; R2 = SW_INPUT + (76 >> 1) = SW_INPUT + 38
-    STR R2, [R1]          ; Stores (SW_INPUT + 38) at LED
-    MOV R6, R5, LSR #1        ; R6 = (SW_INPUT + 38) >> 1
-    STR R6, [R1]
+    STR R2, [R1]              ; Stores (SW_INPUT + 38) at LED
+    MOV R6, R5, LSR #1        ; R6 = R5 >> 1
+    STR R6, [R1]              ; Stores R5 >> 1 at LED address
     HALT                      ; Halts execution
     SW_BASE: 
     .word 0x0140     ; Memory address for switch inputs
