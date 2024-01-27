@@ -1,4 +1,4 @@
-# CPEN-211-Labs
+# CPEN 211 Labs 2023W1
 
 This repository contains code developed for the labs dedicated to the course of CPEN 211 - Introduction to Microcomputers. The code was developed by:
 
