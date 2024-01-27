@@ -1,6 +1,6 @@
-`timescale 1ps/ 1ps
+`timescale 1 ps/ 1 ps
 module tb_lab3_gate();
-  
+
 	reg [3:0] KEY;
 	reg [9:0] SW;
 	reg err;
@@ -695,4 +695,6 @@ initial begin
     else $display("FAILED");
     $stop;
 end
+
+
 endmodule: tb_lab3_gate
